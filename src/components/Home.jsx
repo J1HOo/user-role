@@ -1,6 +1,9 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import CompanyComponent from "../pages/CompanyComponent";
+import axios from "axios";
+import UserComponent from "../pages/UserComponent";
+import AdminComponent from "../pages/AdminComponent";
 
 
 const Home = () => {
@@ -16,28 +19,61 @@ const Home = () => {
     // 다른 형태로 존재하는 데이터를 JSON 형식으로 parse 변환하여 유저정보를 확인하겠다.
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
-        if(storedUser) {
+        if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
     }, []);
 
     // 역할(role)에 따른 컴포넌트 선택
     const roleUser = () => {
-        if(!user) {
+        if (!user) {
             return <div>사용자 정보가 없습니다.</div>;
         }
-        console.log("user Role",user.userRole);
+        console.log("user Role", user.userRole);
         switch (user.userRole) {
-            case 2:
-                return <CompanyComponent />
+            case 0, "0":
+                return <AdminComponent/>
+
+            case 1, "1":
+                return <UserComponent/>
+
+            case 2, "2":
+                return <CompanyComponent/>
             default:
                 return <div>접근 권한이 없습니다.</div>;
         }
 
     }
 
+    // 로그아웃
+    // const handleLogout = () => {
+    //     axios.get("/api/user/logout")
+    //         .then((res) => {
+    //             if (res.data.status === "logout") {
+    //                 localStorage.removeItem("user");
+    //                 sessionStorage.getItem("user");
+    //                 setUser(null);
+    //                 alert("로그아웃 되었습니다.");
+    //                 navigate("/");
+    //             } else {
+    //                 alert("현재 진행중인 작업을 종료하고 다시 시도해주세요.");
+    //             }
+    //         })
+    //         .catch((err) => {
+    //                 console.log("logout error : ", err);
+    //                 alert("백엔드 서버와의 연결이 원활하지 않습니다.");
+    //             }
+    //         )
+    // }
 
-    return(
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        setUser(null);
+        alert("로그아웃 되었습니다.");
+        navigate("/");
+    }
+
+    return (
         <div>
             <h1>홈페이지</h1>
 
@@ -48,7 +84,7 @@ const Home = () => {
                 <div>
 
                     <p>환영합니다. {user.userName}님!</p>
-                    <button>로그아웃</button>
+                    <button onClick={handleLogout}>로그아웃</button>
 
 
                     {/* 역할에 따라 다른 컴포넌트 렌더링  */}
@@ -58,8 +94,8 @@ const Home = () => {
                 :
 
                 <div>
-                    <button onClick={ () => navigate("/login")}>로그인</button>
-                    <button onClick={ () => navigate("/")}>회원가입</button>
+                    <button onClick={() => navigate("/login")}>로그인</button>
+                    <button onClick={() => navigate("/")}>회원가입</button>
                 </div>
 
 
