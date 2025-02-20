@@ -32,10 +32,10 @@ const Home = () => {
         console.log("user Role", user.userRole);
         switch (user.userRole) {
             case 0, "0":
-                return <AdminComponent/>
+                return <UserComponent/>
 
             case 1, "1":
-                return <UserComponent/>
+                return <AdminComponent/>
 
             case 2, "2":
                 return <CompanyComponent/>

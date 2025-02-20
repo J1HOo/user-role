@@ -26,13 +26,14 @@ function PathRoute() {
                 {/* 0. 관리자, 회사, 유저에 관계 없이 전체 접근 가능 Components */}
                 <Route path="/" element={<Home/>}/>
                 <Route path="/login" element={<Login setUser={setUser}/>}/>
-                <Route path="/admin" element={<ProtectedRoute allowedRoles={[0]}>
-                    <AdminPage user={user}/>
+
+                <Route path="/user" element={<ProtectedRoute allowedRoles={[0]}>
+                    <UserPage user={user}/>
                 </ProtectedRoute>}
                 />
 
-                <Route path="/user" element={<ProtectedRoute allowedRoles={[1]}>
-                    <UserPage user={user}/>
+                <Route path="/admin" element={<ProtectedRoute allowedRoles={[1]}>
+                    <AdminPage user={user}/>
                 </ProtectedRoute>}
                 />
 
