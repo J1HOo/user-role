@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import apiService from "./apiService";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const PostList = () => {
     const [posts, setPosts] = useState([]);
     const [err, setErr] = useState(null);
-    const [keyword, setKeyword] = useState([]);
+    const [keyword, setKeyword] = useState("");
 
     useEffect(() => {
         apiService.getAllPosts(setPosts, setErr);
@@ -34,7 +34,7 @@ const PostList = () => {
                 <button onClick={handleSearch}>검색</button>
             </div>
 
-            {err && <p style={{ color: "red" }}>{err}</p>}
+            {err && <p style={{ color: "red" }}>{err.message}</p>}
 
             <ul>
                 {posts.length > 0 ? (
@@ -51,5 +51,6 @@ const PostList = () => {
             </ul>
         </div>
     );
-}
+};
+
 export default PostList;
