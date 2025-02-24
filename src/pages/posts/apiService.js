@@ -31,20 +31,34 @@ const apiService = {
         },
 
     searchPosts:
-        function (keyword, setPost, setErr) {
-        axios.get(`${API_POST_URL}/search?keyword=${encodeURIComponent(keyword)}`)
-            .then(res => setPost(res.data))
-            .catch(err => setErr(err));
-    },
+        function (keyword, callback, errorCallback) {
+            // encodeURIComponent -> 영어, 숫자 이외 값이 왔을 때 문제가 생길 경우 UTF-8 로 한글 깨짐 없도록 설정
+            // 예전 코드에선 필수 였으나, 근래 필수는 아님
+            axios.get(`${API_POST_URL}/search?keyword=${encodeURIComponent(keyword)}`)
+                .then(res => callback(res.data))
+                .catch(err => errorCallback(err));
+        },
 
+    suggestedPosts:
+        function (keyword, callback, errorCallback) {
+            axios.get(`${API_POST_URL}/search?keyword=${encodeURIComponent(keyword)}`)
+                .then((res) => {
+                    const suggestions = res.data?.map(post => post.postTitle) || [];
+                    callback(suggestions);
+                })
+                .catch((err) => {
+                    errorCallback(err);
+                });
+        },
     createPost:
-        function (postData, setErr) {
-        axios.post(API_POST_URL, postData, {
-            headers: { "Content-Type": "application/json" }
-        })
-            .then(res => res.data)
-            .catch(err => setErr(err));
-    },
+        function (postData, errorCallback) {
+            axios.post(API_POST_URL, postData, {
+                headers: {"Content-Type": "application/json"}
+            })
+                .then(res => res.data)
+                .catch(err => errorCallback(err));
+        },
 }
 
-    export default apiService;
+
+export default apiService;

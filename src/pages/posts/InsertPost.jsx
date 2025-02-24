@@ -6,7 +6,7 @@ function InsertPost() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [category, setCategory] = useState("일반"); // 기본 카테고리 설정
-    const [err, setErr] = useState(null);
+    const [err, errorCallback] = useState(null);
     const navigate = useNavigate();
 
 
@@ -25,9 +25,9 @@ function InsertPost() {
 
         };
         if (!newPost.postTitle || !newPost.postContent) {
-            setErr({message: "제목과 내용은 필수입니다."});
+            errorCallback({message: "제목과 내용은 필수입니다."});
         } else {
-        apiService.createPost(newPost, setErr);
+        apiService.createPost(newPost, errorCallback);
         alert("게시물이 등록되었습니다.");
         navigate("/posts");
         }
