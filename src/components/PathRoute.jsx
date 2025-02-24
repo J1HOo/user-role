@@ -17,6 +17,7 @@ import UserPage from "../pages/UserPage";
 import InsertPost from "../pages/posts/InsertPost";
 import SearchPosts from "../pages/posts/SearchPosts";
 import PostList from "../pages/posts/PostList";
+import PostDetail from "../pages/posts/PostDetail";
 
 function PathRoute () {
     const[user, setUser] = useState(null);
