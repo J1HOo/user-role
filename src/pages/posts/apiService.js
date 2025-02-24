@@ -37,6 +37,14 @@ const apiService = {
             .catch(err => setErr(err));
     },
 
+    createPost:
+        function (postData, setErr) {
+        axios.post(API_POST_URL, postData, {
+            headers: { "Content-Type": "application/json" }
+        })
+            .then(res => res.data)
+            .catch(err => setErr(err));
+    },
 }
 
     export default apiService;
