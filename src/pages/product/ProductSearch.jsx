@@ -1,98 +1,95 @@
-// import 변수명 from '파일명 파일위치 js 기능명칭' => 변수명으로 기능을 사용해야할 때
-// import 'css 파일 위치'                           => 가져오기만 진행할 때 사용
-import React, {useState} from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import './ProductSearch.css';
+import ApiProductService from "./apiProductService";
 
 const ProductSearch = () => {
-    // 검색 변수 이름
     const [keyword, setKeyword] = useState("");
-    //검색 결과 조회 목록 변수 이름
     const [products, setProducts] = useState([]);
-    const [sugs, setSugs] = useState([]); // suggestions -> sugs 추천 검색어를 제안하는 리스트
-    const [show, setShow] = useState(false); // 빈 값일 경우 제안 X 빈 값이 아닐경우 제안 OK
-
+    const [sugs, setSugs] = useState([]);
+    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e) => {
-        const value = e.target.value.trim(); // input 창에서 이벤트가 발생 이벤트가 발생한 특정 값을 공백제거하고 value 이름에 저장
-        // if(!value.trim()){
-        // alert("추천할 검색어가 없습니다")
-        // }
-        // 검색 추천은 추천일 뿐 필수로 추천을 해야할 이유가 없기 때문에 alert 사용 XXXXXX
-        setKeyword(value); // input 가져온 value 값을 setKeyword 에 저장
+        const value = e.target.value;
+        setKeyword(value);
+    };
 
-        // value 값이 존재한다면 추천 검색어 제공
-        if (value) {
-            axios
-                .get(`http://localhost:8080/api/products/search?keyword=${value}`)
-                .then(
-                    (res) => {
-                        // res.data 는 배열 형식으로 데이터를 가져올 수 없기 때문에 사용 불가
-                        /*
-                        const 제안리스트 = Array.isArray(res.data)
-                            ?
-                            res.data.map(
-                                (p) => (
-                                    p.productName
-                                )
-                            )
-                            :
-                            [];
+    useEffect(() => {
+        const debounceTimer = setTimeout(() => {
+            const trimmedKeyword = keyword.trim();
 
-                         */
-                        const 제안리스트 = res.data?.map(p => p.productName) || [];
-                        setSugs(제안리스트); // 백엔드에서 가져온 제안리스트에서 이름만 sugs 변수이름으로 전달
-                        setShow(true); //제안 리스트를 sugs 변수이름으로 전달했고, 전달한 값이 존재하면 추천 검색어 보여주기 설정
-                    }
-                )
-                .catch(
+            if (trimmedKeyword) {
+                ApiProductService.getSuggestions(
+                    trimmedKeyword,
+                    (suggestionList) => {
+                        setSugs(suggestionList);
+                        setShow(true);
+                    },
                     (err) => {
-                        console.error("추천 검색어 동작 실행 실패 : ", err);
-                        setSugs([]); // 새로운 input 값이 들어왔을 때 문제가 발생하면 기존에 추천한 리스트를 모두 비우기
+                        console.error("추천 검색어 동작 실행 실패:", err);
+                        setSugs([]);
+                        setShow(false);
                     }
-                )
+                );
+            } else {
+                setSugs([]);
+                setShow(false);
+            }
+        }, 300);
 
-        } else { //추천할 검색어가 없다면 한마디로 input 이 비어있다면!!
-            setSugs([]); //추천 검색어 리스트 비우기
-            setShow(false);
+        return () => clearTimeout(debounceTimer);
+    }, [keyword]);
 
-        }
-    }
-
-    const handleSug = (sugs) => {
-        setKeyword(sugs);
+    const handleSug = (suggestion) => {
+        setKeyword(suggestion);
         setShow(false);
-    }
-
+    };
 
     const searchProducts = () => {
-        // input 비어있는지 확인 후 비어있다면
-        // "검색어를 입력하세요." 보여준 후 리턴
         if (!keyword.trim()) {
-            alert("검색어를 입력하세요.");
+            setErrorMessage("검색어를 입력하세요.");
             return;
         }
 
-        axios
-            .get(`http://localhost:8080/api/products/search?keyword=${keyword}`)
-            .then(
-                (res) => {
-                    setProducts(res.data)
-                }
-            )
-            .catch(
-                (err) => {
-                    console.log("검색 실패 : ", err)
-                    setProducts([]); // 기존에 검색된 데이터가 있다면 지워버리기
-                }
-            )
-    }
+        setLoading(true);
+        setErrorMessage("");
 
+        ApiProductService.getProducts(
+            keyword.trim(),
+            (data) => {
+                setProducts(data);
+                setLoading(false);
+
+                if (data.length === 0) {
+                    setErrorMessage(`"${keyword.trim()}" 검색 결과가 없습니다.`);
+                }
+            },
+            (err) => {
+                console.error("검색 실패:", err);
+                setProducts([]);
+                setLoading(false);
+
+                if (err.response) {
+                    if (err.response.status === 404) {
+                        setErrorMessage("요청한 리소스를 찾을 수 없습니다.");
+                    } else if (err.response.status === 500) {
+                        setErrorMessage("서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                    } else {
+                        setErrorMessage(`상품 검색 중 오류가 발생했습니다. (${err.response.status})`);
+                    }
+                } else if (err.request) {
+                    setErrorMessage("서버에 연결할 수 없습니다. 네트워크 연결을 확인해주세요.");
+                } else {
+                    setErrorMessage("상품 검색 중 오류가 발생했습니다.");
+                }
+            }
+        );
+    };
 
     return (
         <div className="productsearch-container">
             <h2>상품 검색</h2>
-            {/*  input onChange 없음   */}
             <div>
                 <input
                     type="text"
@@ -100,47 +97,46 @@ const ProductSearch = () => {
                     onFocus={() => setShow(true)}
                     onChange={handleChange}
                     onBlur={() => setTimeout(() => setShow(false), 200)}
+                    placeholder="상품명을 입력하세요"
                 />
-                {
-                    show && sugs.length > 0 && (
-                        <ul>
-                            {sugs.map(
-                                (sugs, index) => (
-                                    <li key={index} onMouseDown={ () => handleSug(sugs)}>
-                                        {sugs}
-                                    </li>
-                                )
-                            )}
-
-                        </ul>
-                    )
-                }
+                {show && sugs.length > 0 && (
+                    <ul>
+                        {sugs.map((suggestion, index) => (
+                            <li key={index} onMouseDown={() => handleSug(suggestion)}>
+                                {suggestion}
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
-            <button onClick={searchProducts}>검색</button>
+            <button onClick={searchProducts} disabled={loading}>
+                {loading ? "검색 중..." : "검색"}
+            </button>
 
-            <ul>
-                {
-                    products.length > 0 ?
-                        (
-                            products.map(
-                                (product) => (
-                                    <li key={product.productId}>
-                                        이름 : {product.productName}<br/>
-                                        카테고리 : {product.productCategory}<br/>
+            {/* 에러 메시지 표시 */}
+            {errorMessage && (
+                <div className="error-message">{errorMessage}</div>
+            )}
 
-                                    </li>
-                                )
-                            )
-                        )
-                        :
-                        (
-                            <div>
-                                {keyword} <p>검색 결과가 없습니다.</p>
-                            </div>
-                        )
+            {/* 로딩 표시 */}
+            {loading && (
+                <div className="loading-message">검색 결과를 불러오는 중입니다...</div>
+            )}
 
-                }
-            </ul>
+            {/* 검색 결과 목록 */}
+            {!loading && products.length > 0 && (
+                <ul className="product-list">
+                    {products.map((product) => (
+                        <li key={product.productId} className="product-item">
+                            <h3>{product.productName}</h3>
+                            <p>카테고리: {product.productCategory}</p>
+                            {product.productPrice && (
+                                <p>가격: {product.productPrice.toLocaleString()}원</p>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };
