@@ -54,7 +54,23 @@ const apiProductService = {
                     errorCallback(err);
                 }
             );
-    }
+    },
+
+    getSearchProduct: function(keyword, callback, errorCallback) {
+        axios
+            .get(`${API_PRODUCT_URL}/search?keyword=${encodeURIComponent(keyword)}`)
+            .then(
+                (res) => {
+                    callback(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error("상품 검색 실패:", err);
+                    errorCallback(err);
+                }
+            );
+    },
 };
 
 export default apiProductService;

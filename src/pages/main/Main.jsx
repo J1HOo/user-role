@@ -1,4 +1,3 @@
-
 const Main = () => {
     return (
         <div className="container">
@@ -35,27 +34,11 @@ const Main = () => {
 
 
             <div className="row">
-                <div className="col-12">
-                    <div className="card">
-                        <img src="https://cdn.autobild.es/sites/navi.axelspringer.es/public/media/image/2016/07/554539-ultimo-caca-cerdo-construir-carreteras.jpg?tf=3840x" className="card-img-top"/>
-                        <div className="card-body">
-                            <h5 className="card-title">
-                                카드 제목
-                            </h5>
-                            <p className="card-text">
-                                카드 내용입니다.
-
-                            </p>
-                            <a href="#" className="btn btn-warning">버튼</a>
-
-                        </div>
-                    </div>
-                </div>
-
-
                 <div className="col-4">
                     <div className="card">
-                        <img src="https://cdn.autobild.es/sites/navi.axelspringer.es/public/media/image/2016/07/554539-ultimo-caca-cerdo-construir-carreteras.jpg?tf=3840x" className="card-img-top"/>
+                        <img
+                            src="https://cdn.autobild.es/sites/navi.axelspringer.es/public/media/image/2016/07/554539-ultimo-caca-cerdo-construir-carreteras.jpg?tf=3840x"
+                            className="card-img-top"/>
                         <div className="card-body">
                             <h5 className="card-title">
                                 카드 제목
@@ -69,10 +52,11 @@ const Main = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="col-4">
                     <div className="card">
-                        <img src="https://cdn.autobild.es/sites/navi.axelspringer.es/public/media/image/2016/07/554539-ultimo-caca-cerdo-construir-carreteras.jpg?tf=3840x" className="card-img-top"/>
+                        <img
+                            src="https://cdn.autobild.es/sites/navi.axelspringer.es/public/media/image/2016/07/554539-ultimo-caca-cerdo-construir-carreteras.jpg?tf=3840x"
+                            className="card-img-top"/>
                         <div className="card-body">
                             <h5 className="card-title">
                                 카드 제목
@@ -86,10 +70,11 @@ const Main = () => {
                         </div>
                     </div>
                 </div>
-
                 <div className="col-4">
                     <div className="card">
-                        <img src="https://cdn.autobild.es/sites/navi.axelspringer.es/public/media/image/2016/07/554539-ultimo-caca-cerdo-construir-carreteras.jpg?tf=3840x" className="card-img-top"/>
+                        <img
+                            src="https://cdn.autobild.es/sites/navi.axelspringer.es/public/media/image/2016/07/554539-ultimo-caca-cerdo-construir-carreteras.jpg?tf=3840x"
+                            className="card-img-top"/>
                         <div className="card-body">
                             <h5 className="card-title">
                                 카드 제목
@@ -103,7 +88,6 @@ const Main = () => {
                         </div>
                     </div>
                 </div>
-
             </div>
 
 
