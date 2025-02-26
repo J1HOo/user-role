@@ -16,11 +16,11 @@ import SearchPosts from "../pages/posts/SearchPosts";
 import InsertPost from "../pages/posts/InsertPost";
 import PostDetail from "../pages/posts/PostDetail";
 import UpdatePost from "../pages/posts/UpdatePost";
-import Main from "../pages/boot-page/Main";
 import NavBar from "./NavBar";
 import ProductList from "../pages/product/ProductList";
 import ProductDetail from "../pages/product/ProductDetail";
 import ProductSearch from "../pages/product/ProductSearch";
+import Main from "../pages/main/Main";
 
 function PathRoute () {
     const[user, setUser] = useState(null);
