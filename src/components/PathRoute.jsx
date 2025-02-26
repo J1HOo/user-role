@@ -18,6 +18,8 @@ import InsertPost from "../pages/posts/InsertPost";
 import SearchPosts from "../pages/posts/SearchPosts";
 import PostList from "../pages/posts/PostList";
 import PostDetail from "../pages/posts/PostDetail";
+import Main from "../pages/main/Main";
+import UpdatePost from "../pages/posts/UpdatePost";
 
 function PathRoute () {
     const[user, setUser] = useState(null);
@@ -31,12 +33,14 @@ function PathRoute () {
 
             <Routes>
                 {/* 0. 관리자, 회사, 유저에 관계 없이 전체 접근 가능 Components */}
-                <Route path="/" element={<Home/>     } />
+                <Route path="/" element={<Main/>     } />
+                <Route path="/home" element={<Home/>     } />
 
                 <Route path="/posts" element={<PostList />} />
                 <Route path="/posts/:postId" element={<PostDetail />} />
                 <Route path="/posts/search" element={<SearchPosts />} />
                 <Route path="/posts/create" element={<InsertPost />} />
+                <Route path="/posts/edit/:postId" element={<UpdatePost />} />
 
 
                 <Route path="/login" element={<Login setUser={setUser}  />} />
