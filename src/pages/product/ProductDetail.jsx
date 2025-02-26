@@ -36,8 +36,7 @@ const ProductDetail = () => {
                     onChange={(e) => setProductId(e.target.value)}
                     placeholder="상품 ID 입력"
                 />
-                <button onClick={getProductDetail}>
-                </button>
+                <button onClick={getProductDetail}>조회</button>
             </div>
 
 
@@ -45,7 +44,7 @@ const ProductDetail = () => {
                 <div className="error-message">{errorMessage}</div>
             )}
 
-            {!product && !errorMessage && (
+            {product && !errorMessage && (
                 <div className="product-info">
                     <h3>{product.productName}</h3>
                     <p>카테고리: {product.productCategory}</p>
