@@ -21,6 +21,7 @@ import ProductList from "../pages/product/ProductList";
 import ProductDetail from "../pages/product/ProductDetail";
 import ProductSearch from "../pages/product/ProductSearch";
 import Main from "../pages/main/Main";
+import ClothesList from "../pages/clothes/ClothesList";
 
 function PathRoute () {
     const[user, setUser] = useState(null);
@@ -42,6 +43,7 @@ function PathRoute () {
                 {/* 0. 관리자, 회사, 유저에 관계 없이 전체 접근 가능 Components */}
                 <Route path="/home" element={<Home/>     } />
                 <Route path="/" element={<Main/>     } />
+                <Route path="/closeList" element={<ClothesList />} />
 
                 <Route path="/posts" element={<PostList />} />
                 <Route path="/posts/:postId" element={<PostDetail />} />
