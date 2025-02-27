@@ -18,12 +18,16 @@ const ClothesList = () => {
                             <p> {c.ccategory}</p>
                             <p> {c.cbrand}</p>
                             <p> {c.cname}</p>
+
+                            <Link to={`/clothes/${c.cid}`}>상세</Link>
                         </li>
                     ))
                 ) : (
                     <p>게시물이 없습니다.</p>
                 )}
             </ul>
+
+            <Link to={"/clothes/add"}>추가</Link>
         </div>
     )}
 
