@@ -71,6 +71,36 @@ const apiProductService = {
                 }
             );
     },
+
+    getAllProducts: function(callback) {
+        axios
+            .get(API_PRODUCT_URL)
+            .then(
+                (res) => {
+                    callback(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error(err);
+                }
+            );
+    },
+
+    deleteProducts: function (id, callback) {
+        axios
+            .delete(`${API_PRODUCT_URL}/${id}`)
+            .then(
+                (res) => {
+                    callback(res.data);
+                }
+            )
+            .catch(
+                (err) => {
+                    console.error(err);
+                }
+            )
+    }
 };
 
 export default apiProductService;
