@@ -148,6 +148,23 @@ const apiService = {
                         console.error("프론트엔드에서 확인할 에러 메세지 : ", error);
                     }
                 )
+        },
+
+    createPost:
+        function (newPost, callback, errorCallback) {
+            axios.post(API_POST_URL, newPost, {
+                headers: {"Content-Type": "application/json"}
+            })
+                .then(
+                    (res) => {
+                        alert(callback);
+                    }
+                )
+                .catch(
+                    (err) => {
+                        alert(errorCallback);
+                    }
+                )
         }
 
 }
