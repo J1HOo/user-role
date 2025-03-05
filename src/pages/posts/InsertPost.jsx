@@ -1,7 +1,7 @@
-
-import FormPostData from "./FormPostData";
 import {useState} from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import FormPostData from "../clothes/FormPostData";
 
 const InsertPost = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +11,8 @@ const InsertPost = () => {
         postCategory: "",
         postStatus: "",
     })
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -27,7 +29,8 @@ const InsertPost = () => {
             .then(
                 (res) => {
                     alert("게시물 등록이 완료되었습니다.");
-                    // navigate 이용해서 게시물 리스트로 이동
+                    handleChange(res.data);
+                    navigate("/posts");
                 }
             )
             .catch(

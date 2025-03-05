@@ -1,5 +1,5 @@
 
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import apiProductService from "./apiProductService";
 import {useParams} from "react-router-dom";
 
@@ -11,16 +11,11 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);// 주문 수량 상태 관리
 
-    const getProductDetail = () => {
-        // input 비어있는지 확인 후 비어있다면
-        // "상품 ID를 입력하세요." 보여준 후 리턴
-        if (!productId.trim()) { // trim() 왼쪽 오른쪽 공백 제거
-            alert("상품 ID를 입력하세요.");
-            return;
-        }
-        // 조회 클릭시 api endpoint 로 접근해서 제품 id 에 해당하는 데이터 호출
+
+    useEffect(() => {
         apiProductService.getProductById(productId, setProduct)
-    }
+    }, []);
+
 
 
     return (
@@ -35,8 +30,10 @@ const ProductDetail = () => {
                         <div className="small mb-1">{product?.productCategory}</div>
                         <h1 className="display-5 fw-bolder">{product?.productName}</h1>
                         <div className="fs-5 mb-5">
-                            <span className="text-decoration-line-through">할인 전 가격</span>
-                            <span>{product?.productPrice}원</span>
+                            <span className="text-decoration-line-through">
+                                {(product?.productPrice * 1.3).toLocaleString()}원
+                            </span>
+                            <span>{product?.productPrice.toLocaleString()}원</span>
                         </div>
                         <p className="lead">{product?.productDescription}</p>
                         <div className="d-flex">
